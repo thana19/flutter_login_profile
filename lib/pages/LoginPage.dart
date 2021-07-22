@@ -27,9 +27,9 @@ class _LoginPageState extends State<LoginPage> {
     var body = convert.jsonDecode(response.body);
 
     if (response.statusCode == 200) {
-      print("login");
-      // final snackBar = SnackBar(content: Text('Login'));
-      // ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      print("Logged In");
+      final snackBar = SnackBar(content: Text('Logged In'));
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
 
       // Navigator.pushNamedAndRemoveUntil(context, '/home', (Route<dynamic> route) => false);
       Navigator.pushNamed(context, '/home');
@@ -39,7 +39,6 @@ class _LoginPageState extends State<LoginPage> {
 
       final snackBar2 = SnackBar(content: Text(body['message']));
       ScaffoldMessenger.of(context).showSnackBar(snackBar2);
-
     }
 
   }
@@ -97,7 +96,7 @@ class _LoginPageState extends State<LoginPage> {
                                print(_formKey.currentState!.value);
                                _login(_formKey.currentState!.value);
                               },
-                              child: Text("Login",),
+                              child: Text("Login",style: TextStyle(color: Colors.blue)),
                             ),
                           ),
                           SizedBox(height: 15),
