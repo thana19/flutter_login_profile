@@ -32,7 +32,8 @@ class _LoginPageState extends State<LoginPage> {
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
 
       // Navigator.pushNamedAndRemoveUntil(context, '/home', (Route<dynamic> route) => false);
-      Navigator.pushNamed(context, '/home');
+      // Navigator.pushNamed(context, '/home');
+      Navigator.pushNamed(context, '/launcher');
 
     } else {
       print(body['message']);
