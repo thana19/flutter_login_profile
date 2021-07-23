@@ -43,16 +43,16 @@ class _LoginPageState extends State<LoginPage> {
 
     if (response.statusCode == 200) {
       print("Logged In");
-      print(body['message']);
-      print(body['id']);
-      final snackBar = SnackBar(content: Text(body['message']));
+      print(body['access_token']);
+      // print(body['id']);
+      final snackBar = SnackBar(content: Text(body['access_token']));
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
 
       //save token to pref
       await prefs.setString('token', response.body);
 
       //get profile
-      _getProfile();
+      // _getProfile();
 
       // Navigator.pushNamedAndRemoveUntil(context, '/home', (Route<dynamic> route) => false);
 
@@ -73,7 +73,7 @@ class _LoginPageState extends State<LoginPage> {
     print(token['access_token']);
 
     //http get profile
-    var url = Uri.parse('https://api.codingthailand.com/api/profile');
+    var url = Uri.parse('https://api.thana.in.th/getprofile');
     var response = await http.get(
       url,
       headers: {
@@ -87,11 +87,11 @@ class _LoginPageState extends State<LoginPage> {
       print(response.body);
     }else{
       print(response.body);
-      print(body['message']);
+      // print(body['message']);
     }
 
     //save profile to pref
-    await prefs.setString('user', body['data']['user']);
+    // await prefs.setString('user', body['data']['user']);
   }
 
   @override
