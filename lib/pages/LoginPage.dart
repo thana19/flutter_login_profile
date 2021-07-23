@@ -50,9 +50,9 @@ class _LoginPageState extends State<LoginPage> {
 
       //save token to pref
       await prefs.setString('token', response.body);
-
+      print(prefs.getString('token'));
       //get profile
-      // _getProfile();
+      _getProfile();
 
       // Navigator.pushNamedAndRemoveUntil(context, '/home', (Route<dynamic> route) => false);
 
@@ -84,10 +84,12 @@ class _LoginPageState extends State<LoginPage> {
     );
     var body = convert.jsonDecode(response.body);
     if (response.statusCode == 200){
+      print('ok');
       print(response.body);
     }else{
-      print(response.body);
-      // print(body['message']);
+      print('fail');
+      // print(response.body);
+      print(body['message']);
     }
 
     //save profile to pref
