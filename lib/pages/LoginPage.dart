@@ -13,7 +13,7 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormBuilderState>();
-  late SharedPreferences prefs ;
+  late SharedPreferences prefs;
 
   _initPref() async {
     prefs = await SharedPreferences.getInstance();
@@ -23,21 +23,17 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   @override
-  void initState(){
+  void initState() {
     super.initState();
     _initPref();
   }
 
   _login(var values) async {
     var url = Uri.parse('https://api.thana.in.th/login');
-    var response = await http.post(
-        url,
+    var response = await http.post(url,
         headers: {'Content-Type': 'application/json'},
-        body: convert.jsonEncode({
-        'username': values['username'],
-        'password': values['password']
-        })
-    );
+        body: convert.jsonEncode(
+            {'username': values['username'], 'password': values['password']}));
 
     var body = convert.jsonDecode(response.body);
 
@@ -66,7 +62,7 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 
-  Future<void> _getProfile() async{
+  Future<void> _getProfile() async {
     //get token from pref
     var tokenString = prefs.getString('token');
     var token = convert.jsonDecode(tokenString!);
@@ -83,17 +79,25 @@ class _LoginPageState extends State<LoginPage> {
       },
     );
     var body = convert.jsonDecode(response.body);
-    if (response.statusCode == 200){
+    if (response.statusCode == 200) {
       print('ok');
       print(response.body);
-    }else{
+    } else {
       print('fail');
       // print(response.body);
       print(body['message']);
     }
 
     //save profile to pref
-    // await prefs.setString('user', body['data']['user']);
+    await prefs.setString('userid', body['userid']);
+    await prefs.setString('username', body['username']);
+    await prefs.setString('name', body['name']);
+    await prefs.setString('surname', body['surname']);
+
+    print(prefs.getString('userid'));
+    print(prefs.getString('username'));
+    print(prefs.getString('name'));
+    print(prefs.getString('surname'));
   }
 
   @override
@@ -107,73 +111,71 @@ class _LoginPageState extends State<LoginPage> {
           child: SingleChildScrollView(
             child: Column(
               children: [
-                Image (
+                Image(
                   image: AssetImage('assets/logo.png'),
                   height: 100,
                 ),
-                Text('Login', style: TextStyle(fontSize: 20,color: Colors.blue)),
+                Text('Login',
+                    style: TextStyle(fontSize: 20, color: Colors.blue)),
                 Padding(
-                    padding: EdgeInsets.all(10),
-                    child: FormBuilder(
-                      key: _formKey,
-                      initialValue: {
-                        'username': '',
-                        'password': ''
-                      },
-                      child: Column(
-                        children: [
-                          //email password TextField
-                          FormBuilderTextField(
-                            name: 'username',
-                            decoration: InputDecoration(
-                              labelText: 'Email',
-                              filled: true,
-                            ),
-
+                  padding: EdgeInsets.all(10),
+                  child: FormBuilder(
+                    key: _formKey,
+                    initialValue: {'username': '', 'password': ''},
+                    child: Column(
+                      children: [
+                        //email password TextField
+                        FormBuilderTextField(
+                          name: 'username',
+                          decoration: InputDecoration(
+                            labelText: 'Email',
+                            filled: true,
                           ),
-                          SizedBox(height: 15),
-                          FormBuilderTextField(
-                            name: 'password',
-                            decoration: InputDecoration(
-                              labelText: 'password',
-                              filled: true,
-                            ),
-
+                        ),
+                        SizedBox(height: 15),
+                        FormBuilderTextField(
+                          name: 'password',
+                          decoration: InputDecoration(
+                            labelText: 'password',
+                            filled: true,
                           ),
-                          SizedBox(height: 20,),
-                          SizedBox(
-                            child: MaterialButton(
-                              onPressed: () {
+                        ),
+                        SizedBox(
+                          height: 20,
+                        ),
+                        SizedBox(
+                          child: MaterialButton(
+                            onPressed: () {
                               _formKey.currentState!.save();
 
-                               print(_formKey.currentState!.value);
-                               _login(_formKey.currentState!.value);
-                              },
-                              child: Text("Login",style: TextStyle(color: Colors.blue)),
-                            ),
+                              print(_formKey.currentState!.value);
+                              _login(_formKey.currentState!.value);
+                            },
+                            child: Text("Login",
+                                style: TextStyle(color: Colors.blue)),
                           ),
-                          SizedBox(height: 15),
-                          Row(
-                            children: [
-                              Expanded(
-                                  child: MaterialButton(
-                                    onPressed: () {
-                                      Navigator.pushNamed(context, '/register');
-                                    },
-                                    child: Text('Register', style: TextStyle(color: Colors.blue)),
-                                  )
-                              )
-                            ],
-                          )
-                        ],
-                      ),
+                        ),
+                        SizedBox(height: 15),
+                        Row(
+                          children: [
+                            Expanded(
+                                child: MaterialButton(
+                              onPressed: () {
+                                Navigator.pushNamed(context, '/register');
+                              },
+                              child: Text('Register',
+                                  style: TextStyle(color: Colors.blue)),
+                            ))
+                          ],
+                        )
+                      ],
                     ),
+                  ),
                 )
               ],
             ),
           ),
         ),
-        
       ),
     );
   }
