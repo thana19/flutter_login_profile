@@ -8,14 +8,13 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class Launcher extends StatefulWidget {
   const Launcher({Key? key}) : super(key: key);
-  // static const routeName = "/";
 
   @override
   _LauncherState createState() => _LauncherState();
 }
 
 class _LauncherState extends State<Launcher> {
-  int _selectedIndex = 0;
+  int _selectedIndex = 2;
   List<Widget> _pageWidget = [
     HomePage(),
     AboutPage(),

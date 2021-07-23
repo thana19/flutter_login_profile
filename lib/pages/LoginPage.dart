@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'dart:convert' as convert;
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -12,6 +13,20 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormBuilderState>();
+  late SharedPreferences prefs ;
+
+  _initPref() async {
+    prefs = await SharedPreferences.getInstance();
+    // int counter = (prefs.getInt('counter') ?? 0) + 1;
+    // print('Pressed $counter times.');
+    // await prefs.setInt('counter', counter);
+  }
+
+  @override
+  void initState(){
+    super.initState();
+    _initPref();
+  }
 
   _login(var values) async {
     var url = Uri.parse('https://api.thana.in.th/login');
@@ -28,20 +43,55 @@ class _LoginPageState extends State<LoginPage> {
 
     if (response.statusCode == 200) {
       print("Logged In");
-      final snackBar = SnackBar(content: Text('Logged In'));
+      print(body['message']);
+      print(body['id']);
+      final snackBar = SnackBar(content: Text(body['message']));
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
 
+      //save token to pref
+      await prefs.setString('token', response.body);
+
+      //get profile
+      _getProfile();
+
       // Navigator.pushNamedAndRemoveUntil(context, '/home', (Route<dynamic> route) => false);
-      // Navigator.pushNamed(context, '/home');
-      Navigator.pushNamed(context, '/launcher');
+
+      // Navigator.pushNamed(context, '/launcher');
 
     } else {
       print(body['message']);
 
-      final snackBar2 = SnackBar(content: Text(body['message']));
-      ScaffoldMessenger.of(context).showSnackBar(snackBar2);
+      final snackBar = SnackBar(content: Text(body['message']));
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+    }
+  }
+
+  Future<void> _getProfile() async{
+    //get token from pref
+    var tokenString = prefs.getString('token');
+    var token = convert.jsonDecode(tokenString!);
+    print(token['access_token']);
+
+    //http get profile
+    var url = Uri.parse('https://api.codingthailand.com/api/profile');
+    var response = await http.get(
+      url,
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'Authorization': 'Bearer ${token['access_token']}',
+      },
+    );
+    var body = convert.jsonDecode(response.body);
+    if (response.statusCode == 200){
+      print(response.body);
+    }else{
+      print(response.body);
+      print(body['message']);
     }
 
+    //save profile to pref
+    await prefs.setString('user', body['data']['user']);
   }
 
   @override
