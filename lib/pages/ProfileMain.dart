@@ -5,14 +5,14 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'ScreenArguments.dart';
 
-class ProfilePage extends StatefulWidget {
-  const ProfilePage({Key? key}) : super(key: key);
+class ProfileMain extends StatefulWidget {
+  const ProfileMain({Key? key}) : super(key: key);
 
   @override
-  _ProfilePageState createState() => _ProfilePageState();
+  _ProfileMainState createState() => _ProfileMainState();
 }
 
-class _ProfilePageState extends State<ProfilePage> {
+class _ProfileMainState extends State<ProfileMain> {
   final _formKey = GlobalKey<FormBuilderState>();
   late SharedPreferences prefs;
   Map<String, dynamic> profile = {'username': '', 'name': '', "surname": ''};
@@ -87,8 +87,7 @@ class _ProfilePageState extends State<ProfilePage> {
       // final snackBar = SnackBar(content: Text(body['nModified']));
       // ScaffoldMessenger.of(context).showSnackBar(snackBar);
 
-      Navigator.pushNamed(context, '/launcher');
-      // Navigator.pop(context, 'About AAA');
+      // Navigator.pushNamed(context, '/launcher');
       _getProfile2();
     } else {
       print(response.body);
@@ -120,14 +119,13 @@ class _ProfilePageState extends State<ProfilePage> {
       print('ok');
       print(response.body);
 
-      // Navigator.pushNamed(context, '/launcher',
-      //     arguments: ScreenArguments(
-      //       body['userid'],
-      //       body['username'],
-      //       body['name'],
-      //       body['surname'],
-      //     ));
-      // Navigator.pushNamed(context, '/launcher');
+      Navigator.pushNamed(context, '/launcher',
+          arguments: ScreenArguments(
+            body['userid'],
+            body['username'],
+            body['name'],
+            body['surname'],
+          ));
       print(body['username']);
 
       //save profile to pref
@@ -142,23 +140,24 @@ class _ProfilePageState extends State<ProfilePage> {
     }
   }
 
-  void _logout() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.remove('token');
-    await prefs.remove('profile');
+  void _openProfilePage() async {
+    //   SharedPreferences prefs = await SharedPreferences.getInstance();
+    //  var profileString = prefs.getString('profile');
 
     //open login
     // Navigator.pushNamedAndRemoveUntil(
     //     context, '/login', (Route<dynamic> route) => false);
-    Navigator.of(context, rootNavigator: true)
-        .pushNamedAndRemoveUntil('/login', (route) => false);
+    Navigator.pushNamed(context, '/profile',
+        arguments: ScreenArguments(
+          profile['userid'],
+          profile['username'],
+          profile['name'],
+          profile['surname'],
+        ));
   }
 
   @override
   Widget build(BuildContext context) {
-    final screenAgr =
-        ModalRoute.of(context)!.settings.arguments as ScreenArguments;
-
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -166,7 +165,7 @@ class _ProfilePageState extends State<ProfilePage> {
         actions: [
           IconButton(
               onPressed: () {
-                _logout();
+                _openProfilePage();
               },
               icon: Icon(Icons.exit_to_app))
         ],
@@ -187,61 +186,6 @@ class _ProfilePageState extends State<ProfilePage> {
               ),
               Padding(
                 padding: EdgeInsets.all(10),
-                child: FormBuilder(
-                  key: _formKey,
-                  initialValue: {
-                    // 'username': profile['username'],
-                    // 'name': profile['name'],
-                    // 'surname': profile['surname'],
-                    'username': screenAgr.username,
-                    'name': screenAgr.name,
-                    'surname': screenAgr.surname,
-                  },
-                  child: Column(
-                    children: [
-                      FormBuilderTextField(
-                        name: 'username',
-                        decoration: InputDecoration(
-                          labelText: 'Email',
-                          filled: true,
-                        ),
-                      ),
-                      SizedBox(height: 15),
-                      FormBuilderTextField(
-                        name: 'name',
-                        decoration: InputDecoration(
-                          labelText: 'name',
-                          filled: true,
-                        ),
-                      ),
-                      SizedBox(height: 15),
-                      FormBuilderTextField(
-                        name: 'surname',
-                        decoration: InputDecoration(
-                          labelText: 'surname',
-                          filled: true,
-                        ),
-                      ),
-                      SizedBox(height: 15),
-                      Row(
-                        children: [
-                          Expanded(
-                              child: MaterialButton(
-                            onPressed: () {
-                              // Navigator.pushNamed(context, '/register');
-                              print('Update');
-                              _formKey.currentState!.save();
-
-                              _updateProfile(_formKey.currentState!.value);
-                            },
-                            child: Text('Save',
-                                style: TextStyle(color: Colors.blue)),
-                          ))
-                        ],
-                      )
-                    ],
-                  ),
-                ),
               )
             ],
           ),

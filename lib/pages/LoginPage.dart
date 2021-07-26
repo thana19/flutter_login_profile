@@ -3,6 +3,7 @@ import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'dart:convert' as convert;
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_login_profile/pages/ScreenArguments.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -41,19 +42,26 @@ class _LoginPageState extends State<LoginPage> {
       print("Logged In");
       print(body['access_token']);
       // print(body['id']);
-      final snackBar = SnackBar(content: Text(body['access_token']));
-      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      // final snackBar = SnackBar(content: Text(body['access_token']));
+      // ScaffoldMessenger.of(context).showSnackBar(snackBar);
 
       //save token to pref
       await prefs.setString('token', response.body);
+      // await prefs.setString('token', body['access_token']);
       print(prefs.getString('token'));
       //get profile
       _getProfile();
 
-      // Navigator.pushNamedAndRemoveUntil(context, '/home', (Route<dynamic> route) => false);
+      // Navigator.pushNamedAndRemoveUntil(
+      //     context, '/launcher', (Route<dynamic> route) => false);
 
-      // Navigator.pushNamed(context, '/launcher');
-
+      // Navigator.pushNamed(context, '/profile',
+      //     arguments: ScreenArguments(
+      //       profile['userid'],
+      //       profile['username'],
+      //       profile['name'],
+      //       profile['surname'],
+      //       ));
     } else {
       print(body['message']);
 
@@ -79,25 +87,30 @@ class _LoginPageState extends State<LoginPage> {
       },
     );
     var body = convert.jsonDecode(response.body);
+
     if (response.statusCode == 200) {
       print('ok');
       print(response.body);
+
+      Navigator.pushNamed(context, '/launcher',
+          arguments: ScreenArguments(
+            body['userid'],
+            body['username'],
+            body['name'],
+            body['surname'],
+          ));
+      print(body['username']);
+
+      //save profile to pref
+      await prefs.setString('profile', response.body);
+      // print(prefs.getString('profile'));
+      // await prefs.setString('username', body['username']);
+      print(prefs.getString('username'));
     } else {
       print('fail');
       // print(response.body);
       print(body['message']);
     }
-
-    //save profile to pref
-    await prefs.setString('userid', body['userid']);
-    await prefs.setString('username', body['username']);
-    await prefs.setString('name', body['name']);
-    await prefs.setString('surname', body['surname']);
-
-    print(prefs.getString('userid'));
-    print(prefs.getString('username'));
-    print(prefs.getString('name'));
-    print(prefs.getString('surname'));
   }
 
   @override
@@ -131,6 +144,14 @@ class _LoginPageState extends State<LoginPage> {
                             labelText: 'Email',
                             filled: true,
                           ),
+                          validator: FormBuilderValidators.compose([
+                            FormBuilderValidators.required(context,
+                                errorText: 'please insert email'),
+                            // FormBuilderValidators.numeric(context),
+                            FormBuilderValidators.email(context),
+                            // FormBuilderValidators.max(context, 70),
+                          ]),
+                          keyboardType: TextInputType.emailAddress,
                         ),
                         SizedBox(height: 15),
                         FormBuilderTextField(
@@ -139,6 +160,14 @@ class _LoginPageState extends State<LoginPage> {
                             labelText: 'password',
                             filled: true,
                           ),
+                          validator: FormBuilderValidators.compose([
+                            FormBuilderValidators.required(context,
+                                errorText: 'please insert password'),
+                            // FormBuilderValidators.numeric(context),
+                            // FormBuilderValidators.email(context),
+                            FormBuilderValidators.minLength(context, 8,
+                                errorText: 'min length 8 character'),
+                          ]),
                         ),
                         SizedBox(
                           height: 20,
@@ -147,9 +176,12 @@ class _LoginPageState extends State<LoginPage> {
                           child: MaterialButton(
                             onPressed: () {
                               _formKey.currentState!.save();
-
-                              print(_formKey.currentState!.value);
-                              _login(_formKey.currentState!.value);
+                              if (_formKey.currentState!.validate()) {
+                                print(_formKey.currentState!.value);
+                                _login(_formKey.currentState!.value);
+                              } else {
+                                print("validation failed");
+                              }
                             },
                             child: Text("Login",
                                 style: TextStyle(color: Colors.blue)),

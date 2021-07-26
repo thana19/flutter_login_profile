@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_login/pages/AboutPage.dart';
-import 'package:flutter_login/pages/ContactPage.dart';
-import 'package:flutter_login/pages/HomePage.dart';
-import 'package:flutter_login/pages/ProfilePage.dart';
-import 'package:flutter_login/pages/SettingPage.dart';
+import 'package:flutter_login_profile/pages/AboutPage.dart';
+import 'package:flutter_login_profile/pages/ContactPage.dart';
+import 'package:flutter_login_profile/pages/HomePage.dart';
+import 'package:flutter_login_profile/pages/ProfileMain.dart';
+import 'package:flutter_login_profile/pages/SettingPage.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class Launcher extends StatefulWidget {
@@ -14,17 +14,16 @@ class Launcher extends StatefulWidget {
 }
 
 class _LauncherState extends State<Launcher> {
-  int _selectedIndex = 2;
+  int _selectedIndex = 0;
   List<Widget> _pageWidget = [
     HomePage(),
     AboutPage(),
-    ProfilePage(),
+    ProfileMain(),
     ContactPage(),
     SettingPage(),
   ];
 
-  List<BottomNavigationBarItem> _menuBar
-  = <BottomNavigationBarItem>[
+  List<BottomNavigationBarItem> _menuBar = <BottomNavigationBarItem>[
     BottomNavigationBarItem(
       icon: Icon(FontAwesomeIcons.home),
       label: 'Home',
@@ -60,9 +59,7 @@ class _LauncherState extends State<Launcher> {
       bottomNavigationBar: BottomNavigationBar(
         items: _menuBar,
         currentIndex: _selectedIndex,
-        selectedItemColor: Theme
-            .of(context)
-            .primaryColor,
+        selectedItemColor: Theme.of(context).primaryColor,
         unselectedItemColor: Colors.grey,
         onTap: _onItemTapped,
       ),
