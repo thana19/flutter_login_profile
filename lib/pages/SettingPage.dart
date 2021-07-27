@@ -11,17 +11,25 @@ class _SettingPageState extends State<SettingPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Settings'),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text('Settings')
-          ],
+        appBar: AppBar(
+          title: Text('Settings'),
         ),
-      )
-    );
+        body: Container(
+          decoration: BoxDecoration(
+              // image: DecorationImage(
+              //     image: AssetImage('assets/star02.png'), fit: BoxFit.cover)
+              gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [
+                Colors.blue,
+                Colors.white,
+              ])),
+          child: Center(
+            child: Text(
+              'setting',
+            ),
+          ),
+        ));
   }
 }

@@ -101,16 +101,24 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
+        decoration: BoxDecoration(
+            gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [
+              Colors.blue,
+              Colors.white,
+            ])),
         child: Center(
           child: SingleChildScrollView(
             child: Column(
               children: [
                 Image(
-                  image: AssetImage('assets/logo.png'),
+                  image: AssetImage('assets/profile.png'),
                   height: 100,
                 ),
                 Text('Login',
-                    style: TextStyle(fontSize: 20, color: Colors.blue)),
+                    style: TextStyle(fontSize: 20, color: Colors.white)),
                 Padding(
                   padding: EdgeInsets.all(10),
                   child: FormBuilder(

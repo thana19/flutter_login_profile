@@ -138,16 +138,24 @@ class _ProfileMainState extends State<ProfileMain> {
         ],
       ),
       body: Container(
+        decoration: BoxDecoration(
+            gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [
+              Colors.blue,
+              Colors.white,
+            ])),
         child: SingleChildScrollView(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Image(
-                image: AssetImage('assets/logo.png'),
+                image: AssetImage('assets/profile.png'),
                 height: 100,
               ),
               Text(profile['name'],
-                  style: TextStyle(fontSize: 20, color: Colors.blue)),
+                  style: TextStyle(fontSize: 20, color: Colors.white)),
               Text(
                 'The profile ${profile['name']} pushed from share Preference',
               ),
