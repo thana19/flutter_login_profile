@@ -18,9 +18,6 @@ class _LoginPageState extends State<LoginPage> {
 
   _initPref() async {
     prefs = await SharedPreferences.getInstance();
-    // int counter = (prefs.getInt('counter') ?? 0) + 1;
-    // print('Pressed $counter times.');
-    // await prefs.setInt('counter', counter);
   }
 
   @override
@@ -41,27 +38,13 @@ class _LoginPageState extends State<LoginPage> {
     if (response.statusCode == 200) {
       print("Logged In");
       print(body['access_token']);
-      // print(body['id']);
-      // final snackBar = SnackBar(content: Text(body['access_token']));
-      // ScaffoldMessenger.of(context).showSnackBar(snackBar);
 
       //save token to pref
       await prefs.setString('token', response.body);
-      // await prefs.setString('token', body['access_token']);
       print(prefs.getString('token'));
+
       //get profile
       _getProfile();
-
-      // Navigator.pushNamedAndRemoveUntil(
-      //     context, '/launcher', (Route<dynamic> route) => false);
-
-      // Navigator.pushNamed(context, '/profile',
-      //     arguments: ScreenArguments(
-      //       profile['userid'],
-      //       profile['username'],
-      //       profile['name'],
-      //       profile['surname'],
-      //       ));
     } else {
       print(body['message']);
 
@@ -92,23 +75,24 @@ class _LoginPageState extends State<LoginPage> {
       print('ok');
       print(response.body);
 
-      Navigator.pushNamed(context, '/launcher',
-          arguments: ScreenArguments(
-            body['userid'],
-            body['username'],
-            body['name'],
-            body['surname'],
-          ));
+      // Navigator.pushNamed(context, '/launcher',
+      //     arguments: ScreenArguments(
+      //       body['userid'],
+      //       body['username'],
+      //       body['name'],
+      //       body['surname'],
+      //     ));
+
+      Navigator.pushNamed(
+        context,
+        '/launcher',
+      );
       print(body['username']);
 
       //save profile to pref
       await prefs.setString('profile', response.body);
-      // print(prefs.getString('profile'));
-      // await prefs.setString('username', body['username']);
-      print(prefs.getString('username'));
     } else {
       print('fail');
-      // print(response.body);
       print(body['message']);
     }
   }
@@ -116,9 +100,6 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: AppBar(
-      //   title: Text('Login'),
-      // ),
       body: Container(
         child: Center(
           child: SingleChildScrollView(
@@ -137,7 +118,6 @@ class _LoginPageState extends State<LoginPage> {
                     initialValue: {'username': '', 'password': ''},
                     child: Column(
                       children: [
-                        //email password TextField
                         FormBuilderTextField(
                           name: 'username',
                           decoration: InputDecoration(
@@ -147,8 +127,8 @@ class _LoginPageState extends State<LoginPage> {
                           validator: FormBuilderValidators.compose([
                             FormBuilderValidators.required(context,
                                 errorText: 'please insert email'),
-                            // FormBuilderValidators.numeric(context),
                             FormBuilderValidators.email(context),
+                            // FormBuilderValidators.numeric(context),
                             // FormBuilderValidators.max(context, 70),
                           ]),
                           keyboardType: TextInputType.emailAddress,
@@ -163,8 +143,6 @@ class _LoginPageState extends State<LoginPage> {
                           validator: FormBuilderValidators.compose([
                             FormBuilderValidators.required(context,
                                 errorText: 'please insert password'),
-                            // FormBuilderValidators.numeric(context),
-                            // FormBuilderValidators.email(context),
                             FormBuilderValidators.minLength(context, 8,
                                 errorText: 'min length 8 character'),
                           ]),

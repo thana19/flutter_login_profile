@@ -93,12 +93,13 @@ class _ProfilePageState extends State<ProfilePage> {
     } else {
       print(response.body);
       print(body['message']);
-      final snackBar = SnackBar(content: Text(body['message']));
-      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      _logout();
+      // final snackBar = SnackBar(content: Text(body['message']));
+      // ScaffoldMessenger.of(context).showSnackBar(snackBar);
     }
   }
 
-  Future<void> _getProfile2() async {
+  _getProfile2() async {
     //get token from pref
     var tokenString = prefs.getString('token');
     var token = convert.jsonDecode(tokenString!);
@@ -119,26 +120,15 @@ class _ProfilePageState extends State<ProfilePage> {
     if (response.statusCode == 200) {
       print('ok');
       print(response.body);
-
-      // Navigator.pushNamed(context, '/launcher',
-      //     arguments: ScreenArguments(
-      //       body['userid'],
-      //       body['username'],
-      //       body['name'],
-      //       body['surname'],
-      //     ));
-      // Navigator.pushNamed(context, '/launcher');
       print(body['username']);
 
       //save profile to pref
       await prefs.setString('profile', response.body);
-      // print(prefs.getString('profile'));
-      // await prefs.setString('username', body['username']);
       print(prefs.getString('username'));
     } else {
       print('fail');
-      // print(response.body);
       print(body['message']);
+      _logout();
     }
   }
 
@@ -162,7 +152,7 @@ class _ProfilePageState extends State<ProfilePage> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: Text('Profile'),
+        title: Text('Edit Profile'),
         actions: [
           IconButton(
               onPressed: () {
@@ -170,7 +160,6 @@ class _ProfilePageState extends State<ProfilePage> {
               },
               icon: Icon(Icons.exit_to_app))
         ],
-        // title: Text('Profile'),
       ),
       body: Container(
         child: SingleChildScrollView(
@@ -180,7 +169,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 image: AssetImage('assets/logo.png'),
                 height: 100,
               ),
-              Text('profile',
+              Text(profile['name'],
                   style: TextStyle(fontSize: 20, color: Colors.blue)),
               Text(
                 'The profile ${profile['name']} pushed share Preference',
@@ -205,6 +194,12 @@ class _ProfilePageState extends State<ProfilePage> {
                           labelText: 'Email',
                           filled: true,
                         ),
+                        validator: FormBuilderValidators.compose([
+                          FormBuilderValidators.required(context,
+                              errorText: 'please insert email'),
+                          FormBuilderValidators.email(context),
+                        ]),
+                        keyboardType: TextInputType.emailAddress,
                       ),
                       SizedBox(height: 15),
                       FormBuilderTextField(
@@ -213,6 +208,10 @@ class _ProfilePageState extends State<ProfilePage> {
                           labelText: 'name',
                           filled: true,
                         ),
+                        validator: FormBuilderValidators.compose([
+                          FormBuilderValidators.required(context,
+                              errorText: 'not null'),
+                        ]),
                       ),
                       SizedBox(height: 15),
                       FormBuilderTextField(
@@ -221,6 +220,10 @@ class _ProfilePageState extends State<ProfilePage> {
                           labelText: 'surname',
                           filled: true,
                         ),
+                        validator: FormBuilderValidators.compose([
+                          FormBuilderValidators.required(context,
+                              errorText: 'not null'),
+                        ]),
                       ),
                       SizedBox(height: 15),
                       Row(
@@ -229,12 +232,24 @@ class _ProfilePageState extends State<ProfilePage> {
                               child: MaterialButton(
                             onPressed: () {
                               // Navigator.pushNamed(context, '/register');
-                              print('Update');
-                              _formKey.currentState!.save();
-
-                              _updateProfile(_formKey.currentState!.value);
+                              if (_formKey.currentState!.validate()) {
+                                print('Update');
+                                _formKey.currentState!.save();
+                                _updateProfile(_formKey.currentState!.value);
+                              } else {
+                                print("validation failed");
+                              }
                             },
                             child: Text('Save',
+                                style: TextStyle(color: Colors.blue)),
+                          )),
+                          Expanded(
+                              child: MaterialButton(
+                            onPressed: () {
+                              // Navigator.pushNamed(context, '/register');
+                              _logout();
+                            },
+                            child: Text('Log out',
                                 style: TextStyle(color: Colors.blue)),
                           ))
                         ],

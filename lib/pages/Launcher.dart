@@ -17,9 +17,9 @@ class _LauncherState extends State<Launcher> {
   int _selectedIndex = 0;
   List<Widget> _pageWidget = [
     HomePage(),
-    AboutPage(),
+    // AboutPage(),
     ProfileMain(),
-    ContactPage(),
+    // ContactPage(),
     SettingPage(),
   ];
 
@@ -28,18 +28,18 @@ class _LauncherState extends State<Launcher> {
       icon: Icon(FontAwesomeIcons.home),
       label: 'Home',
     ),
-    BottomNavigationBarItem(
-      icon: Icon(FontAwesomeIcons.infoCircle),
-      label: 'About',
-    ),
+    // BottomNavigationBarItem(
+    //   icon: Icon(FontAwesomeIcons.infoCircle),
+    //   label: 'About',
+    // ),
     BottomNavigationBarItem(
       icon: Icon(FontAwesomeIcons.userAlt),
       label: 'Profile',
     ),
-    BottomNavigationBarItem(
-      icon: Icon(FontAwesomeIcons.addressCard),
-      label: 'Contact',
-    ),
+    // BottomNavigationBarItem(
+    //   icon: Icon(FontAwesomeIcons.addressCard),
+    //   label: 'Contact',
+    // ),
     BottomNavigationBarItem(
       icon: Icon(FontAwesomeIcons.cog),
       label: 'Settings',
