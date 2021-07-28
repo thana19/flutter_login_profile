@@ -66,7 +66,7 @@ class _ProfilePageState extends State<ProfilePage> {
     // var profile = convert.jsonDecode(profileString!);
     // print(profile);
 
-    var url = Uri.parse('https://api.thana.in.th/updateprofile');
+    var url = Uri.parse('https://api.thana.in.th/workshop/updateprofile');
     var response = await http.patch(url,
         headers: {
           'Content-Type': 'application/json',
@@ -106,7 +106,7 @@ class _ProfilePageState extends State<ProfilePage> {
     print(token['access_token']);
 
     //http get profile
-    var url = Uri.parse('https://api.thana.in.th/getprofile');
+    var url = Uri.parse('https://api.thana.in.th/workshop/getprofile');
     var response = await http.get(
       url,
       headers: {
@@ -234,34 +234,56 @@ class _ProfilePageState extends State<ProfilePage> {
                         ]),
                       ),
                       SizedBox(height: 15),
-                      Row(
-                        children: [
-                          Expanded(
-                              child: MaterialButton(
-                            onPressed: () {
-                              // Navigator.pushNamed(context, '/register');
-                              if (_formKey.currentState!.validate()) {
-                                print('Update');
-                                _formKey.currentState!.save();
-                                _updateProfile(_formKey.currentState!.value);
-                              } else {
-                                print("validation failed");
-                              }
-                            },
-                            child: Text('Save',
-                                style: TextStyle(color: Colors.blue)),
-                          )),
-                          Expanded(
-                              child: MaterialButton(
-                            onPressed: () {
-                              // Navigator.pushNamed(context, '/register');
-                              _logout();
-                            },
-                            child: Text('Log out',
-                                style: TextStyle(color: Colors.blue)),
-                          ))
-                        ],
-                      )
+                      MaterialButton(
+                        onPressed: () {
+                          // Navigator.pushNamed(context, '/register');
+                          if (_formKey.currentState!.validate()) {
+                            print('Update');
+                            _formKey.currentState!.save();
+                            _updateProfile(_formKey.currentState!.value);
+                          } else {
+                            print("validation failed");
+                          }
+                        },
+                        child:
+                            Text('Save', style: TextStyle(color: Colors.blue)),
+                      ),
+                      MaterialButton(
+                        onPressed: () {
+                          // Navigator.pushNamed(context, '/register');
+                          _logout();
+                        },
+                        child: Text('Log out',
+                            style: TextStyle(color: Colors.blue)),
+                      ),
+                      // Row(
+                      //   children: [
+                      //     Expanded(
+                      //         child: MaterialButton(
+                      //       onPressed: () {
+                      //         // Navigator.pushNamed(context, '/register');
+                      //         if (_formKey.currentState!.validate()) {
+                      //           print('Update');
+                      //           _formKey.currentState!.save();
+                      //           _updateProfile(_formKey.currentState!.value);
+                      //         } else {
+                      //           print("validation failed");
+                      //         }
+                      //       },
+                      //       child: Text('Save',
+                      //           style: TextStyle(color: Colors.blue)),
+                      //     )),
+                      //     Expanded(
+                      //         child: MaterialButton(
+                      //       onPressed: () {
+                      //         // Navigator.pushNamed(context, '/register');
+                      //         _logout();
+                      //       },
+                      //       child: Text('Log out',
+                      //           style: TextStyle(color: Colors.blue)),
+                      //     ))
+                      //   ],
+                      // )
                     ],
                   ),
                 ),

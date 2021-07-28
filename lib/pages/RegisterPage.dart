@@ -16,7 +16,7 @@ class _RegisterPageState extends State<RegisterPage> {
   _register(var values) async {
     print(values);
 
-    var url = Uri.parse('https://api.thana.in.th/users');
+    var url = Uri.parse('https://api.thana.in.th/workshop/users');
     var response = await http.post(url,
         headers: {'Content-Type': 'application/json'},
         body: convert.jsonEncode({
@@ -87,14 +87,25 @@ class _RegisterPageState extends State<RegisterPage> {
                           labelText: 'Email',
                           filled: true,
                         ),
+                        validator: FormBuilderValidators.compose([
+                          FormBuilderValidators.required(context,
+                              errorText: 'please insert email'),
+                          FormBuilderValidators.email(context),
+                        ]),
+                        keyboardType: TextInputType.emailAddress,
                       ),
                       SizedBox(height: 15),
                       FormBuilderTextField(
                         name: 'password',
+                        obscureText: true,
                         decoration: InputDecoration(
                           labelText: 'password',
                           filled: true,
                         ),
+                        validator: FormBuilderValidators.compose([
+                          FormBuilderValidators.required(context,
+                              errorText: 'not null'),
+                        ]),
                       ),
                       SizedBox(height: 15),
                       FormBuilderTextField(
@@ -103,6 +114,10 @@ class _RegisterPageState extends State<RegisterPage> {
                           labelText: 'name',
                           filled: true,
                         ),
+                        validator: FormBuilderValidators.compose([
+                          FormBuilderValidators.required(context,
+                              errorText: 'not null'),
+                        ]),
                       ),
                       SizedBox(height: 15),
                       FormBuilderTextField(
@@ -111,6 +126,10 @@ class _RegisterPageState extends State<RegisterPage> {
                           labelText: 'surname',
                           filled: true,
                         ),
+                        validator: FormBuilderValidators.compose([
+                          FormBuilderValidators.required(context,
+                              errorText: 'not null'),
+                        ]),
                       ),
                       SizedBox(height: 15),
                       Row(
@@ -118,11 +137,14 @@ class _RegisterPageState extends State<RegisterPage> {
                           Expanded(
                               child: MaterialButton(
                             onPressed: () {
-                              // Navigator.pushNamed(context, '/register');
-                              print('register');
-                              _formKey.currentState!.save();
+                              if (_formKey.currentState!.validate()) {
+                                print('register');
+                                _formKey.currentState!.save();
 
-                              _register(_formKey.currentState!.value);
+                                _register(_formKey.currentState!.value);
+                              } else {
+                                print("validation failed");
+                              }
                             },
                             child: Text('Register',
                                 style: TextStyle(color: Colors.blue)),

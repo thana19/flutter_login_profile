@@ -27,7 +27,7 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   _login(var values) async {
-    var url = Uri.parse('https://api.thana.in.th/login');
+    var url = Uri.parse('https://api.thana.in.th/workshop/login');
     var response = await http.post(url,
         headers: {'Content-Type': 'application/json'},
         body: convert.jsonEncode(
@@ -60,7 +60,7 @@ class _LoginPageState extends State<LoginPage> {
     print(token['access_token']);
 
     //http get profile
-    var url = Uri.parse('https://api.thana.in.th/getprofile');
+    var url = Uri.parse('https://api.thana.in.th/workshop/getprofile');
     var response = await http.get(
       url,
       headers: {
@@ -144,6 +144,7 @@ class _LoginPageState extends State<LoginPage> {
                         SizedBox(height: 15),
                         FormBuilderTextField(
                           name: 'password',
+                          obscureText: true,
                           decoration: InputDecoration(
                             labelText: 'password',
                             filled: true,
@@ -176,12 +177,20 @@ class _LoginPageState extends State<LoginPage> {
                         SizedBox(height: 15),
                         Row(
                           children: [
+                            // Expanded(
+                            //     child: MaterialButton(
+                            //   onPressed: () {
+                            //     // Navigator.pushNamed(context, '/register');
+                            //   },
+                            //   child: Text('Forgot Password',
+                            //       style: TextStyle(color: Colors.blue)),
+                            // )),
                             Expanded(
                                 child: MaterialButton(
                               onPressed: () {
                                 Navigator.pushNamed(context, '/register');
                               },
-                              child: Text('Register',
+                              child: Text('Register User',
                                   style: TextStyle(color: Colors.blue)),
                             ))
                           ],

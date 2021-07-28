@@ -66,7 +66,7 @@ class _ProfileMainState extends State<ProfileMain> {
     prefs = await SharedPreferences.getInstance();
 
     //http get profile
-    var url = Uri.parse('https://api.thana.in.th/getprofile');
+    var url = Uri.parse('https://api.thana.in.th/workshop/getprofile');
     var response = await http.get(
       url,
       headers: {
